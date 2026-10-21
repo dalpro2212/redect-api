@@ -39,23 +39,30 @@
         <button id="btnGuardarPass" class="btn btn-success">Guardar</button>
       </div>
 
-      <h4 class="mb-3">Equipos disponibles</h4>
+      <h4 id="tituloEquipos" class="mb-3">Equipos disponibles</h4>
       <div id="lista" class="row g-3 mb-5"></div>
 
       <h4 id="tituloPrestamos" class="mb-3">Mis préstamos</h4>
       <ul id="prestamos" class="list-group mb-5"></ul>
 
       <div id="adminBox" class="card p-3 d-none">
-        <h5>Agregar equipo (solo administrador)</h5>
-        <input id="nuevoNombre" class="form-control mb-2" placeholder="Nombre">
-        <select id="nuevaCategoria" class="form-select mb-2">
+        <h5 id="tituloForm">Agregar equipo</h5>
+        <input id="formNombre" class="form-control mb-2" placeholder="Nombre">
+        <select id="formCategoria" class="form-select mb-2">
           <option value="audiovisual">audiovisual</option>
           <option value="herramienta">herramienta</option>
           <option value="laptop">laptop</option>
         </select>
-        <input id="nuevaDescripcion" class="form-control mb-2" placeholder="Descripción">
-        <input id="nuevaFoto" class="form-control mb-2" placeholder="Foto: https://... o /img/camara.jpg (opcional)">
-        <button id="btnAgregar" class="btn btn-primary">Agregar equipo</button>
+        <input id="formDescripcion" class="form-control mb-2" placeholder="Descripción">
+        <input id="formFoto" class="form-control mb-2" placeholder="Foto: https://... o /img/camara.jpg (opcional)">
+        <select id="formEstado" class="form-select mb-2 d-none">
+          <option value="Disponible">Disponible</option>
+          <option value="En mantenimiento">En mantenimiento</option>
+        </select>
+        <div class="d-flex gap-2">
+          <button id="btnGuardarEquipo" class="btn btn-primary">Agregar equipo</button>
+          <button id="btnCancelar" class="btn btn-outline-secondary d-none">Cancelar</button>
+        </div>
       </div>
     </div>
   </div>
