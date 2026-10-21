@@ -33,6 +33,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('Disponible', 'Prestado', 'En mantenimiento'),
       allowNull: false,
       defaultValue: 'Disponible'
+    },
+    foto: {
+      type: DataTypes.STRING(500)
     }
   }, {
     sequelize,
