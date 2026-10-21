@@ -28,8 +28,9 @@ const validar = (esquema, { minimoUnCampo = false } = {}) => (req, res, next) =>
         if (regla.enum && !regla.enum.includes(valor)) {
             errores.push(`${campo} debe ser uno de: ${regla.enum.join(', ')}`);
         }
-        limpio[campo] = valor;
-    }
+        limpio[campo] = (typeof valor === 'string' && campo !== 'password')
+            ? valor.replace(/[]/g, '')
+            : valor;    }
 
     if (minimoUnCampo && Object.keys(limpio).length === 0) {
         errores.push('Envía al menos un campo para actualizar');
@@ -67,6 +68,15 @@ const esquemas = {
         userId: { requerido: true, tipo: 'entero' },
         equipoId: { requerido: true, tipo: 'entero' },
         fechaDevolucionEsperada: { requerido: true, tipo: 'fecha' }
+    },
+        registro: {
+        nombre: { requerido: true, tipo: 'string', max: 100 },
+        email: { requerido: true, tipo: 'string', max: 150 },
+        password: { requerido: true, tipo: 'string', max: 100 }
+    },
+    login: {
+        email: { requerido: true, tipo: 'string', max: 150 },
+        password: { requerido: true, tipo: 'string', max: 100 }
     }
 };
 
