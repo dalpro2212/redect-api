@@ -28,7 +28,7 @@ const validar = (esquema, { minimoUnCampo = false } = {}) => (req, res, next) =>
         if (regla.enum && !regla.enum.includes(valor)) {
             errores.push(`${campo} debe ser uno de: ${regla.enum.join(', ')}`);
         }
-        limpio[campo] = (typeof valor === 'string' && campo !== 'password')
+        limpio[campo] = (typeof valor === 'string' && !['password', 'actual', 'nueva'].includes(campo))
             ? valor.replace(/[]/g, '')
             : valor;    }
 
@@ -56,13 +56,15 @@ const esquemas = {
         nombre: { requerido: true, tipo: 'string', max: 150 },
         categoria: { requerido: true, tipo: 'string', enum: CATEGORIAS },
         descripcion: { tipo: 'string', max: 1000 },
-        estado: { tipo: 'string', enum: ESTADOS }
+        estado: { tipo: 'string', enum: ESTADOS },
+        foto: { tipo: 'string', max: 500 }
     },
     equipoActualizar: {
         nombre: { tipo: 'string', max: 150 },
         categoria: { tipo: 'string', enum: CATEGORIAS },
         descripcion: { tipo: 'string', max: 1000 },
-        estado: { tipo: 'string', enum: ESTADOS }
+        estado: { tipo: 'string', enum: ESTADOS },
+        foto: { tipo: 'string', max: 500 }
     },
     prestamoCrear: {
         userId: { requerido: true, tipo: 'entero' },
@@ -77,6 +79,10 @@ const esquemas = {
     login: {
         email: { requerido: true, tipo: 'string', max: 150 },
         password: { requerido: true, tipo: 'string', max: 100 }
+    },
+        cambiarPassword: {
+        actual: { requerido: true, tipo: 'string', max: 100 },
+        nueva: { requerido: true, tipo: 'string', max: 100 }
     }
 };
 

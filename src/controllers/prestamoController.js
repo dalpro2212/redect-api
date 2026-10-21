@@ -5,7 +5,10 @@ const fallo = (status, mensaje) => Object.assign(new Error(mensaje), { status })
 
 const listarPrestamos = async (req, res) => {
     try {
+        const where = req.user.rol === 'admin' ? {} : { userId: req.user.id };
+
         const prestamos = await Prestamo.findAll({
+            where,
             include: [
                 { model: User, as: 'usuario', attributes: ['id', 'nombre', 'email'] },
                 { model: Equipo, as: 'equipo' }
@@ -52,6 +55,9 @@ const devolverPrestamo = async (req, res) => {
         const prestamo = await sequelize.transaction(async (t) => {
             const p = await Prestamo.findByPk(req.params.id, { transaction: t, lock: t.LOCK.UPDATE });
             if (!p) throw fallo(404, 'Préstamo no encontrado');
+                        if (req.user.rol !== 'admin' && p.userId !== req.user.id) {
+                throw fallo(403, 'No puedes devolver un préstamo de otro usuario');
+            }
             if (p.estado === 'Devuelto') throw fallo(409, 'Este préstamo ya fue devuelto');
 
             await p.update({ estado: 'Devuelto', fechaDevolucionReal: new Date() }, { transaction: t });

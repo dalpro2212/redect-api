@@ -5,7 +5,14 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(helmet()); // cabeceras de seguridad
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+            'img-src': ["'self'", 'data:', 'https:']
+        }
+    }
+})); // cabeceras de seguridad
 app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:3000' })); // CORS restringido
 app.use(express.json({ limit: '10kb' }));
 app.use(express.static('public')); // frontend

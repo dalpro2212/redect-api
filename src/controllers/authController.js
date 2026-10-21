@@ -34,5 +34,21 @@ const login = async (req, res) => {
         res.status(500).json({ mensaje: error.message });
     }
 };
+const cambiarPassword = async (req, res) => {
+    try {
+        const { actual, nueva } = req.body;
+        if (nueva.length < 8) {
+            return res.status(400).json({ mensaje: 'La nueva contraseña debe tener al menos 8 caracteres' });
+        }
+        const user = await User.findByPk(req.user.id);
+        const ok = user && await bcrypt.compare(actual, user.password);
+        if (!ok) return res.status(400).json({ mensaje: 'La contraseña actual es incorrecta' });
 
-module.exports = { registro, login };
+        await user.update({ password: await bcrypt.hash(nueva, 10) });
+        res.json({ mensaje: 'Contraseña actualizada' });
+    } catch (error) {
+        res.status(500).json({ mensaje: error.message });
+    }
+};
+
+module.exports = { registro, login, cambiarPassword };
