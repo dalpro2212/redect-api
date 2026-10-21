@@ -11,6 +11,16 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   Prestamo.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    // ... el resto queda igual
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false
