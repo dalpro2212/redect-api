@@ -1,0 +1,103 @@
+@base = http://localhost:3000/api
+
+### 1. Listar equipos (esperado: 200)
+GET {{base}}/equipos
+
+### 2. Listar solo disponibles (esperado: 200, sin el trípode)
+GET {{base}}/equipos?estado=Disponible
+
+### 3. Crear equipo OK (esperado: 201)
+POST {{base}}/equipos
+Content-Type: application/json
+
+{
+  "nombre": "Micrófono",
+  "categoria": "audiovisual"
+}
+
+### 4. Crear equipo con categoría inválida (esperado: 400)
+POST {{base}}/equipos
+Content-Type: application/json
+
+{
+  "nombre": "X",
+  "categoria": "otra"
+}
+
+### 5. Préstamo OK (esperado: 201)
+POST {{base}}/prestamos
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "equipoId": 1,
+  "fechaDevolucionEsperada": "2026-12-01"
+}
+
+### 6. Equipo ya prestado (esperado: 409)
+POST {{base}}/prestamos
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "equipoId": 1,
+  "fechaDevolucionEsperada": "2026-12-01"
+}
+
+### 7. Equipo en mantenimiento (esperado: 409)
+POST {{base}}/prestamos
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "equipoId": 7,
+  "fechaDevolucionEsperada": "2026-12-01"
+}
+
+### 8. Equipo inexistente (esperado: 404)
+POST {{base}}/prestamos
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "equipoId": 999,
+  "fechaDevolucionEsperada": "2026-12-01"
+}
+
+### 9. Segundo préstamo del mismo usuario (esperado: 201)
+POST {{base}}/prestamos
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "equipoId": 2,
+  "fechaDevolucionEsperada": "2026-12-01"
+}
+
+### 10. Tercer préstamo: supera el límite de 2 (esperado: 409)
+POST {{base}}/prestamos
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "equipoId": 3,
+  "fechaDevolucionEsperada": "2026-12-01"
+}
+
+### 11. Devolver préstamo (esperado: 200)
+PUT {{base}}/prestamos/1/devolver
+
+### 12. Devolver otra vez el mismo préstamo (esperado: 409)
+PUT {{base}}/prestamos/1/devolver
+
+### 13. Usuario con mora (esperado: 403)
+# Antes: en phpMyAdmin pon una fecha pasada en fechaDevolucionEsperada
+# de un préstamo activo del usuario 2 y luego envía esto.
+POST {{base}}/prestamos
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "equipoId": 4,
+  "fechaDevolucionEsperada": "2026-12-01"
+}
